@@ -189,57 +189,83 @@ isa_codes = {
         "je" : {"opcode" : "11111", "type" : "e"},
         "hlt" : {"opcode" : "11010", "type" : "f"}}
 
-f = open("instructions.txt","r")             
+list_of_instructions = list(isa_codes.keys()) #Code to create a list which contains all the instructions 
+list_of_instructions.remove("movi")          #of the isa
+list_of_instructions.remove("movr")
+list_of_instructions.append("mov")
+
+list_of_registers = list(reg_codes.keys()) #Code to create a list which contains all the name of the 
+list_of_registers.remove("FLAGS")         #registers
+
+
+
+f = open("instruction.txt","r")             #reads data from the input file
 data = f.readlines()
 f.close()
 
+for counter in range(len(data)):
+    data[counter]=data[counter].rstrip()
+    data[counter] = data[counter].split()  #ends here
+
+
+list_of_variables = []                              # makes a list of the name of the variables
+line_when_variable_added = []                       # and the line when they are declared
+for counter in range(len(data)):
+    if data[counter][0] == "var":
+        list_of_variables.append(data[counter][1])
+        line_when_variable_added.append(counter+1)
+
+input_labels = []                                   # classifies the input into registers, memory locations
+jump_to_labels = []                                 # , labels, instructions and immediates      
+input_register = []
+input_memory = []
+input_instruction = []
+immediates = []
+
 for counter in range(len(data)):   
-    try:                                                                       #first we just find out the labesl and the instructions 
+    try:                                                                      #first we just find out the labesl and the instructions 
         if data[counter][0][len(data[counter][0])-1] == ":":                   #present in the input and put them into lists
             input_labels.append(data[counter][0][0:len(data[counter][0])-1:])  #Depending on the type of instruction, we can extract 
             input_instruction.append(data[counter][1])                         #more info from a given line
-            if isa_codes[data[counter[1]]]["type"] == "a":
+            if isa_codes[data[counter][1]]["type"] == "a":
                 input_register.append(data[counter][2])
                 input_register.append(data[counter][3])
                 input_register.append(data[counter][4])
-            elif isa_codes[data[counter[1]]]["type"] == "b":
+            elif isa_codes[data[counter][1]]["type"] == "b":
                 input_register.append(data[counter][2])
                 immediates.append(data[counter][3][1::])
-            elif isa_codes[data[counter[1]]]["type"] == "c":
+            elif isa_codes[data[counter][1]]["type"] == "c":
                 input_register.append(data[counter][2])
                 input_register.append(data[counter][3]) 
-            elif isa_codes[data[counter[1]]]["type"] == "d":
+            elif isa_codes[data[counter][1]]["type"] == "d":
                 input_register.append(data[counter][2])
                 input_memory.append(data[counter][3])
-            elif isa_codes[data[counter[1]]]["type"] == "e":
+            elif isa_codes[data[counter][1]]["type"] == "e":
                 jump_to_labels.append(data[counter][2])
+            else:
+                continue
+
+        else:
+            input_instruction.append(data[counter][0])
+            if isa_codes[data[counter][0]]["type"] == "a":
+                input_register.append(data[counter][0])
+                input_register.append(data[counter][1])
+                input_register.append(data[counter][2])
+            elif isa_codes[data[counter][0]]["type"] == "b":
+                input_register.append(data[counter][0])
+                immediates.append(data[counter][1][1::])
+            elif isa_codes[data[counter][0]]["type"] == "c":
+                input_register.append(data[counter][0])
+                input_register.append(data[counter][1]) 
+            elif isa_codes[data[counter][0]]["type"] == "d":
+                input_register.append(data[counter][0])
+                input_memory.append(data[counter][1])
+            elif isa_codes[data[counter][0]]["type"] == "e":
+                jump_to_labels.append(data[counter][1])
             else:
                 continue
     except:
         continue
-
-    else:
-        try:
-            input_instruction.append(data[counter][0])
-            if isa_codes[data[counter][0]]["type"] == "a":
-                input_register.append(data[counter][1])
-                input_register.append(data[counter][2])
-                input_register.append(data[counter][3])
-            elif isa_codes[data[counter[1]]]["type"] == "b":
-                input_register.append(data[counter][1])
-                immediates.append(data[counter][2][1::])
-            elif isa_codes[data[counter[1]]]["type"] == "c":
-                input_register.append(data[counter][1])
-                input_register.append(data[counter][2]) 
-            elif isa_codes[data[counter[1]]]["type"] == "d":
-                input_register.append(data[counter][1])
-                input_memory.append(data[counter][2])
-            elif isa_codes[data[counter[1]]]["type"] == "e":
-                jump_to_labels.append(data[counter][1])
-            else:
-                continue
-        except:
-            continue
             
 m= []
 for i in range(0,127) :
