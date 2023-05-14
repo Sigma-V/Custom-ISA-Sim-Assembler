@@ -168,3 +168,8 @@ for counter in range(len(data)):
         list_of_variables.append(data[counter][1])
         line_when_variable_added.append(counter+1)
         
+list_of_new_instructions = ['var','var','var','ld','ld','st','jmp','add','hlt_label:'] # makes list of instructions according to order of calling
+list_of_jmp = [["hlt_label",8,'hlt']]                                                  # makes list of jumping on label with the line to traverse and instruction given in that line
+list_reg = [['R1',3],['R2',4],['R3',5],['R1',7],['R2',7],['R3',7]]                     # list of registers with number of line called in
+list_var = ['var1','var2','var3']                                                      # list of variables declared according to order
+
