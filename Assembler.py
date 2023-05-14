@@ -166,4 +166,66 @@ def checking_variable_declared_starting(line_when_variable_added):
         return False
 
 
+reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110", "FLAGS" : "111"}
+isa_codes = {
+        "add" : {"opcode" : "00000", "type" : "a"},
+        "sub" : {"opcode" : "00001", "type" : "a"},
+        "movi" : {"opcode" : "00010", "type" : "b"},
+        "movr" : {"opcode" : "00011", "type" : "c"},
+        "ld" : {"opcode" : "00100", "type" : "d"},
+        "st" : {"opcode" : "00101", "type" : "d"},
+        "mul" : {"opcode" : "00110", "type" : "a"},
+        "div" : {"opcode" : "00111", "type" : "c"},
+        "rs" : {"opcode" : "01000", "type" : "b"},
+        "ls" : {"opcode" : "01001", "type" : "b"},
+        "xor" : {"opcode" : "01010", "type" : "a"},
+        "or" : {"opcode" : "01011", "type" : "a"},
+        "and" : {"opcode" : "01100", "type" : "a"},
+        "not" : {"opcode" : "01101", "type" : "c"},
+        "cmp" : {"opcode" : "01110", "type" : "c"},
+        "jmp" : {"opcode" : "01111", "type" : "e"},
+        "jlt" : {"opcode" : "11100", "type" : "e"},
+        "jgt" : {"opcode" : "11101", "type" : "e"},
+        "je" : {"opcode" : "11111", "type" : "e"},
+        "hlt" : {"opcode" : "11010", "type" : "f"}}
 
+f = open("instructions.txt","r")             
+data = f.readlines()
+f.close()
+
+m= []
+for i in range(0,127) :
+    x = str(bin(i)).lstrip("0b")
+    m.append(x)
+
+label_checker = {}         
+var_name = {}              
+count_counter = var_count = count_empty = 0
+
+for i in data:
+    if i != "\n":
+        final_list = [x for x in i.split()]
+        if final_list[0][-1] == ":":
+            final_list = final_list[1:]
+        if final_list != []:
+            if final_list[0] == "var":
+                var_count += 1
+        else:
+            count_empty += 1
+    else:
+        count_empty += 1
+
+length = len(data) - var_count -count_empty
+
+for i in data:
+    if i == "\n":
+        continue
+    else:
+        final_list = [x for x in i.split()]
+        if final_list[0] == "var" :
+            var_name[final_list[1]] = m[count_counter + length]   
+        if final_list[0][-1] == ":" :
+            label_checker[final_list[0][0:-1]] = m[count_counter - var_count]
+            final_list = final_list[1:]
+        if final_list != []:
+            count_counter += 1
