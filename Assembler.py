@@ -193,44 +193,7 @@ f = open("instructions.txt","r")
 data = f.readlines()
 f.close()
 
-m= []
-for i in range(0,127) :
-    x = str(bin(i)).lstrip("0b")
-    m.append(x)
-
-label_checker = {}         
-var_name = {}              
-count_counter = var_count = count_empty = 0
-
-for i in data:
-    if i != "\n":
-        final_list = [x for x in i.split()]
-        if final_list[0][-1] == ":":
-            final_list = final_list[1:]
-        if final_list != []:
-            if final_list[0] == "var":
-                var_count += 1
-        else:
-            count_empty += 1
-    else:
-        count_empty += 1
-
-length = len(data) - var_count -count_empty
-
-for i in data:
-    if i == "\n":
-        continue
-    else:
-        final_list = [x for x in i.split()]
-        if final_list[0] == "var" :
-            var_name[final_list[1]] = m[count_counter + length]   
-        if final_list[0][-1] == ":" :
-            label_checker[final_list[0][0:-1]] = m[count_counter - var_count]
-            final_list = final_list[1:]
-        if final_list != []:
-            count_counter += 1
-
-            for counter in range(len(data)):   
+for counter in range(len(data)):   
     try:                                                                       #first we just find out the labesl and the instructions 
         if data[counter][0][len(data[counter][0])-1] == ":":                   #present in the input and put them into lists
             input_labels.append(data[counter][0][0:len(data[counter][0])-1:])  #Depending on the type of instruction, we can extract 
@@ -277,3 +240,104 @@ for i in data:
                 continue
         except:
             continue
+            
+m= []
+for i in range(0,127) :
+    x = str(bin(i)).lstrip("0b")
+    m.append(x)
+
+label_checker = {}         
+var_name = {}              
+count_counter = var_count = count_empty = 0
+
+for i in data:
+    if i != "\n":
+        final_list = [x for x in i.split()]
+        if final_list[0][-1] == ":":
+            final_list = final_list[1:]
+        if final_list != []:
+            if final_list[0] == "var":
+                var_count += 1
+        else:
+            count_empty += 1
+    else:
+        count_empty += 1
+
+length = len(data) - var_count -count_empty
+
+for i in data:
+    if i == "\n":
+        continue
+    else:
+        final_list = [x for x in i.split()]
+        if final_list[0] == "var" :
+            var_name[final_list[1]] = m[count_counter + length]   
+        if final_list[0][-1] == ":" :
+            label_checker[final_list[0][0:-1]] = m[count_counter - var_count]
+            final_list = final_list[1:]
+        if final_list != []:
+            count_counter += 1
+    
+for i in data:
+    flag = True
+    val = ""
+    if i == "\n":
+        flag = False
+        pass
+    else:
+        final_list = [x for x in i.split()]
+        if final_list[0] == "var":
+            flag = False
+            pass
+        if final_list[0][-1] == ":" :
+            final_list = final_list[1:]
+        if final_list == []:
+            flag = False
+            pass
+        elif final_list[0] == "add":
+            val = add(final_list[1],final_list[2],final_list[3])
+        elif final_list[0] == "sub":
+            val = sub(final_list[1],final_list[2],final_list[3])
+        elif final_list[0] == "mov":
+            t = True
+            if final_list[2][0] == "$":
+                t = False
+            val = mov(final_list[1],final_list[2],t)
+        elif final_list[0] == "ld":
+            temp=var_name[final_list[2]]
+            val = ld(final_list[1],temp)
+        elif final_list[0] == "st":
+            temp=var_name[final_list[2]]
+            val = st(final_list[1],temp)
+        elif final_list[0] == "mul":
+            val = mul(final_list[1],final_list[2],final_list[3])
+        elif final_list[0] == "div":
+            val = div(final_list[1],final_list[2])
+        elif final_list[0] == "rs":
+            val = rs(final_list[1],final_list[2])
+        elif final_list[0] == "ls":
+            val = ls(final_list[1],final_list[2])
+        elif final_list[0] == "xor":
+            val = xor(final_list[1],final_list[2],final_list[3])
+        elif final_list[0] == "or":
+            val = or_(final_list[1],final_list[2],final_list[3])
+        elif final_list[0] == "and":
+            val = and_(final_list[1],final_list[2],final_list[3])
+        elif final_list[0] == "not":
+            val = not_(final_list[1],final_list[2])
+        elif final_list[0] == "cmp":
+            val = cmp(final_list[1],final_list[2])
+        elif final_list[0] == "jmp":
+            val = jmp(final_list[1])
+        elif final_list[0] == "jlt":
+            val = jlt(final_list[1])
+        elif final_list[0] == "jgt":
+            val = jgt(final_list[1])
+        elif final_list[0] == "je":
+            val = je(final_list[1])
+        elif final_list[0] == "hlt":
+            val = hlt()
+    if flag == True:
+        print(val)
+
+
