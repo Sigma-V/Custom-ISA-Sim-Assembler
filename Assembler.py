@@ -119,54 +119,53 @@ def je(r1):
     val += r
     return val
 
-def validity_of_instruction(input_instruction,list_of_instructions):
-    flag = True
-    for instruction_name in input_instruction:
-        if instruction_name not in list_of_instructions:
-            flag = False
-            break
-    return flag
-
-def validity_of_registers(input_register,list_of_registers):
-    flag = True
-    for register_name in input_register:
-        if register_name not in list_of_registers:
-            flag = False
-            break
-    return flag
-
-def validity_of_variables(input_memory,list_of_variables):
-    flag = True
-    for variable in input_memory:
-        if variable not in list_of_variables:
-            flag = False
-            break
-    return flag
+def variable_starting(no_of_var,lines):
+    if sum(lines) != int((no_of_var)*(no_of_var+1)/2):
+        return False
+    else:
+        return True
 
 def correct_usage_of_halt(input_instruction):
     occurence_of_halt = input_instruction.count("hlt")
-    index_of_halt = input_instruction.index("hlt")
+    if occurence_of_halt == 1:
+        index_of_halt = input_instruction.index("hlt")
     last_index = len(input_instruction) - 1
 
     if occurence_of_halt == 1 and index_of_halt == last_index:
         return True
+    elif occurence_of_halt == 0:
+        return "Error: Halt function is absent"
+    elif occurence_of_halt == 1 and index_of_halt < last_index:
+        return "Error: Lines of code present after the halt function"
     else:
-        return False
+        return "Error: Multiple halt functions are present"
 
-def checking_length_of_immediate(immediate):
-    if (len(immediate) == 7):
-        return True
+def valid_immediate(immediate):
+    flag = True
+    for i in range(1,len(immediate)):
+        if immediate[i].isdigit() == False:
+            flag = "is not a valid immediate"
+            break
+    try:
+        if int(immediate[1::]) < 0 or int(immediate[1::]) >127:
+            return " can't be represented as a 7 bit binary number"
+        return flag
+    except:
+        return flag
+
+def valid_memory(memory):
+    if len(memory) != 7:
+        return "does not have a valid memory length"
     else:
-        return False
+        flag = True
+        for i in range(len(memory)):
+            if memory[i] != "1" and memory[i] != "0":
+                flag = "is not a valid memory address"
+                break
+        return flag
 
-def checking_variable_declared_starting(line_when_variable_added):
-    if sum(line_when_variable_added) == int(len(line_when_variable_added)*(len(line_when_variable_added) + 1)/2):
-        return True
-    else:
-        return False
+reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110"}
 
-
-reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110", "FLAGS" : "111"}
 isa_codes = {
         "add" : {"opcode" : "00000", "type" : "a"},
         "sub" : {"opcode" : "00001", "type" : "a"},
@@ -187,19 +186,16 @@ isa_codes = {
         "jlt" : {"opcode" : "11100", "type" : "e"},
         "jgt" : {"opcode" : "11101", "type" : "e"},
         "je" : {"opcode" : "11111", "type" : "e"},
-        "hlt" : {"opcode" : "11010", "type" : "f"}}
+        "hlt" : {"opcode" : "11010", "type" : "f"}
+}
 
 list_of_instructions = list(isa_codes.keys()) #Code to create a list which contains all the instructions 
-list_of_instructions.remove("movi")          #of the isa
-list_of_instructions.remove("movr")
-list_of_instructions.append("mov")
 
-list_of_registers = list(reg_codes.keys()) #Code to create a list which contains all the name of the 
-list_of_registers.remove("FLAGS")         #registers
+list_of_registers = list(reg_codes.keys()) #Code to create a list which contains all the name of the          
+    
+                                           #registers
 
-
-
-f = open("instruction.txt","r")             #reads data from the input file
+f = open("instruction.txt","r")            #reads data from the input file
 data = f.readlines()
 f.close()
 
@@ -207,27 +203,35 @@ for counter in range(len(data)):
     data[counter]=data[counter].rstrip()
     data[counter] = data[counter].split()  #ends here
 
-
+no_of_lines = len(data)
 list_of_variables = []                              # makes a list of the name of the variables
 line_when_variable_added = []                       # and the line when they are declared
 for counter in range(len(data)):
     if data[counter][0] == "var":
         list_of_variables.append(data[counter][1])
         line_when_variable_added.append(counter+1)
+no_of_variables = len(list_of_variables)
 
 input_labels = []                                   # classifies the input into registers, memory locations
-jump_to_labels = []                                 # , labels, instructions and immediates      
+jump_to_labels = []                                 # ,labels, instructions and immediates      
 input_register = []
 input_memory = []
 input_instruction = []
 immediates = []
 
 for counter in range(len(data)):   
-    try:                                                                      #first we just find out the labesl and the instructions 
-        if data[counter][0][len(data[counter][0])-1] == ":":                   #present in the input and put them into lists
-            input_labels.append(data[counter][0][0:len(data[counter][0])-1:])  #Depending on the type of instruction, we can extract 
-            input_instruction.append(data[counter][1])                         #more info from a given line
-            if isa_codes[data[counter][1]]["type"] == "a":
+    try:                                                                                            #first we just find out the labesl and the instructions 
+        if data[counter][0][len(data[counter][0])-1] == ":":                                        #present in the input and put them into lists
+            input_labels.append(data[counter][0][0:len(data[counter][0])-1:])                       #Depending on the type of instruction, we can extract 
+            input_instruction.append(data[counter][1])                                              #more info from a given line
+            if data[counter][1] == "mov"or data[counter][1] == "movi" or data[counter][1] == "movr":
+                if data[counter][3] in list_of_registers:
+                    input_register.append(data[counter][2])
+                    input_register.append(data[counter][3])
+                else:
+                    input_register.append(data[counter][2])
+                    immediates.append(data[counter][3][1::])
+            elif isa_codes[data[counter][1]]["type"] == "a":                                                                  
                 input_register.append(data[counter][2])
                 input_register.append(data[counter][3])
                 input_register.append(data[counter][4])
@@ -247,25 +251,114 @@ for counter in range(len(data)):
 
         else:
             input_instruction.append(data[counter][0])
-            if isa_codes[data[counter][0]]["type"] == "a":
-                input_register.append(data[counter][0])
-                input_register.append(data[counter][1])
-                input_register.append(data[counter][2])
+            if data[counter][0] == "mov" or data[counter][0] == "movi" or data[counter][0] == "movr" :
+                if data[counter][2] in list_of_registers:
+                    input_register.append(data[counter][1])
+                    input_register.append(data[counter][2])
+                else:
+                    input_register.append(data[counter][1])
+                    immediates.append(data[counter][2][1::])
+            elif isa_codes[data[counter][0]]["type"] == "a":
+                    input_register.append(data[counter][1])
+                    input_register.append(data[counter][2])
+                    input_register.append(data[counter][3])
             elif isa_codes[data[counter][0]]["type"] == "b":
-                input_register.append(data[counter][0])
-                immediates.append(data[counter][1][1::])
+                input_register.append(data[counter][1])
+                immediates.append(data[counter][2][1::])
             elif isa_codes[data[counter][0]]["type"] == "c":
-                input_register.append(data[counter][0])
-                input_register.append(data[counter][1]) 
+                input_register.append(data[counter][1])
+                input_register.append(data[counter][2]) 
             elif isa_codes[data[counter][0]]["type"] == "d":
-                input_register.append(data[counter][0])
-                input_memory.append(data[counter][1])
+                input_register.append(data[counter][1])
+                input_memory.append(data[counter][2])
             elif isa_codes[data[counter][0]]["type"] == "e":
                 jump_to_labels.append(data[counter][1])
             else:
                 continue
     except:
+            continue
+
+if variable_starting(no_of_variables,line_when_variable_added) == False:
+    print("Error: Variables must be declared at the beginning")
+
+if correct_usage_of_halt(input_instruction) != True:
+    print(correct_usage_of_halt(input_instruction))
+
+
+for i in range(no_of_lines):
+    base = 0
+    if data[i][0][len(data[i][0])-1] == ":":
+        base += 1
+    instruct = data[i][base]
+    if instruct == "mov":
+        if data[i][base+2][0] == "$":
+            instruct = "movi"
+        else:
+            instruct = "movr"
+    if instruct == "var":
         continue
+    elif instruct not in list_of_instructions:
+        print(f"Error in Line-{i+1}: {instruct} is not defined")
+    else:
+        typ = isa_codes[instruct]["type"]
+        if typ == "a":
+            nos = len(data[i]) - base
+            if nos != 4:
+                print(f"Error in Line-{i+1}: Invalid number of registers")
+            else:
+                if data[i][base+1] not in list_of_registers:
+                    print(f"Error in Line-{i+1}: {data[i][base+1]} is not a valid register")
+                if data[i][base+2] not in list_of_registers:
+                    print(f"Error in Line-{i+1}: {data[i][base+2]} is not a valid register")
+                if data[i][base+3] not in list_of_registers:
+                    print(f"Error in Line-{i+1}: {data[i][base+3]} is not a valid register")
+        elif typ == "b":
+            nos = len(data[i]) - base
+            if nos != 3:
+                print(f"Error in Line-{i+1}: Invalid number of arguments")
+            else:
+                if data[i][base+1] not in list_of_registers:
+                    print(f"Error in Line-{i+1}: {data[i][base+1]} is not a valid register")
+                if data[i][base+2][0] != "$":
+                    print(f"Error in Line-{i+1}: {data[i][base+2][0]} is not a valid immediate")
+                else:
+                    if valid_immediate(data[i][base+2]) != True:
+                        print(f"Error in Line-{i+1}: {data[i][base+2]} {valid_immediate(data[i][base+2])}")
+        elif typ == "c":
+            nos = len(data[i]) - base
+            if nos != 3:
+                print(f"Error in Line-{i+1}: Invalid number of arguments")
+            else:
+                if instruct == "movr":
+                    if data[i][base+1] not in list_of_registers:
+                        print(f"Error in Line-{i+1}: {data[i][base+1]} is not a valid register")
+                    if data[i][base+2] not in list_of_registers and data[i][base+2] != "FLAGS":
+                        print(f"Error in Line-{i+1}: {data[i][base+2]} is not a valid register")
+                else:
+                    if data[i][base+1] not in list_of_registers:
+                        print(f"Error in Line-{i+1}: {data[i][base+1]} is not a valid register")
+                    if data[i][base+2] not in list_of_registers:
+                        print(f"Error in Line-{i+1}: {data[i][base+2]} is not a valid register")
+        elif typ == "d":
+            nos = len(data[i]) - base
+            if nos != 3:
+                print(f"Error in Line-{i+1}: Invalid number of arguments")
+            else:
+                if data[i][base+1] not in list_of_registers:
+                    print(f"Error in Line-{i+1}:{data[i][base+1]} is not a valid register ")
+                if data[i][base + 2] not in list_of_variables and valid_memory(data[i][base + 2]) != True:
+                    print(f"Error in Line-{i+1}: {data[i][base+2]} is not a valid variable name or memory location")
+        elif typ == "e":
+            nos = len(data[i]) - base
+            if nos != 2:
+                print(f"Error in Line-{i+1}: Invalid number of arguments")
+            else:
+                if data[i][base+1] not in input_labels and valid_memory(data[i][base + 1]) != True :
+                    print(f"Error in Line-{i+1}: {data[i][base+1]} is not a valid address")
+        else:
+            nos = len(data[i]) - base
+            if nos != 1:
+                print(f"Error in Line-{i+1}: Invalid number of arguments")
             
 m= []
 for i in range(0,127) :
