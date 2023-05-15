@@ -360,7 +360,7 @@ for i in range(no_of_lines):
             if nos != 1:
                 print(f"Error in Line-{i+1}: Invalid number of arguments")
             
-m= []
+test=[],m= []
 for i in range(0,127) :
     x = str(bin(i)).lstrip("0b")
     m.append(x)
@@ -458,5 +458,14 @@ for i in data:
             val = hlt()
     if flag == True:
         print(val)
+        test.append(val)
+  
+x=open('output.txt','w')
+x.write("*"*17+"\n")
+for i in range(len(test)):
+    x.write(test[i]+"\n")
+x.write("*"*17+"\n")
+x.close()
+
 
 
