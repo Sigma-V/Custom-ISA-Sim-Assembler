@@ -276,13 +276,15 @@ for counter in range(len(data)):
     except:
             continue
 
+pussy = 1
 if variable_starting(no_of_variables,line_when_variable_added) == False:
+    pussy = 0
     print("Error: Variables must be declared at the beginning")
 
 if correct_usage_of_halt(input_instruction) != True:
+    pussy = 0
     print(correct_usage_of_halt(input_instruction))
 
-pussy = 1
 
 for i in range(no_of_lines):
     base = 0
