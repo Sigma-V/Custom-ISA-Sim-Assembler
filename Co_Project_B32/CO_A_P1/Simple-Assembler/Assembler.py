@@ -167,7 +167,7 @@ def valid_memory(memory):
         return flag
 
 
-reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110", "FLAGS" : "111"}
+reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110"}
 isa_codes = {
         "add" : {"opcode" : "00000", "type" : "a"},
         "sub" : {"opcode" : "00001", "type" : "a"},
@@ -194,10 +194,7 @@ list_of_instructions = list(isa_codes.keys())
 
 list_of_registers = list(reg_codes.keys())
 
-        
 data = sys.stdin.readlines()
-data_1 = data.copy()
-
 data_1 = data.copy()
 
 for counter in range(len(data)):
