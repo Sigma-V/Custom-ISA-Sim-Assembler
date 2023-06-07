@@ -38,7 +38,7 @@ while(True):
     temp.append(int_to_bin(ProgCounter,7))
     opCode = line[:5:]
     if opCode == "11010": #Halt
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -59,7 +59,7 @@ while(True):
             registers["111"][1] = ProgCounter
         else:
             registers[r1] = temp_sum
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -88,7 +88,7 @@ while(True):
             registers["111"][1] = ProgCounter
         else:
             registers[r1] = temp_diff
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -117,7 +117,7 @@ while(True):
             registers["111"][1] = ProgCounter
         else:
             registers[r1] = temp_prod
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -150,7 +150,7 @@ while(True):
         for i in range(16):
             ans += c[i]
         registers[r1] = int(ans,2)
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -183,7 +183,7 @@ while(True):
         for i in range(16):
             ans += c[i]
         registers[r1] = int(ans,2)
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -216,7 +216,7 @@ while(True):
         for i in range(16):
             ans += c[i]
         registers[r1] = int(ans,2)
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -239,7 +239,7 @@ while(True):
         imm = line[9::]
         tem = int(imm,2)
         registers[r1] = tem
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -269,7 +269,7 @@ while(True):
             registers["111"][1] = ProgCounter
         else:
             registers[r1] = temp_ans
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -299,7 +299,7 @@ while(True):
             registers["111"][1] = ProgCounter
         else:
             registers[r1] = temp_ans
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -326,7 +326,7 @@ while(True):
             registers[r1][0] = registers[r2]
         else:
             registers[r1] = registers[r2]
-        print(temp[0], end=" ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"], 16), end=" ")
         print(int_to_bin(registers["001"], 16), end=" ")
         print(int_to_bin(registers["010"], 16), end=" ")
@@ -359,7 +359,7 @@ while(True):
             remainder = a%b
             registers["000"] = quotient
             registers["001"] = remainder
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -393,7 +393,7 @@ while(True):
         for i in range(16):
             ans += c[i]
         registers[r1] = int(ans,2)
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -424,7 +424,7 @@ while(True):
         else:
             registers["111"][0] = 3
             registers["111"][1] = ProgCounter
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -455,7 +455,7 @@ while(True):
         mem = line[9::]
         address = int(mem,2)     #prone to error
         registers[r1] = memory_address[address]
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -477,7 +477,7 @@ while(True):
         mem = line[9::]
         address = int(mem,2)
         memory_address[address] = registers[r1]
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -496,7 +496,7 @@ while(True):
         ProgCounter += 1
     elif opCode == "01111": #Unconditional Jump
         mem = line[9::]
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -515,7 +515,7 @@ while(True):
         ProgCounter = int(mem,2)
     elif opCode == "11100": #Less than jump
         mem = line[9::]
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -545,7 +545,7 @@ while(True):
             ProgCounter+=1
     elif opCode == "11111": #Equal to jump
         mem = line[9::]
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -575,7 +575,7 @@ while(True):
             ProgCounter+=1
     elif opCode == "11101": #Greater than jump
         mem = line[9::]
-        print(temp[0],end = " ")
+        print(temp[0],end = "        ")
         print(int_to_bin(registers["000"],16),end = " ")
         print(int_to_bin(registers["001"],16),end = " ")
         print(int_to_bin(registers["010"],16),end = " ")
@@ -617,5 +617,4 @@ for i in range(128 - pussy):
 
 for i in range(128):
     print(memory_dump[i])
-
 
