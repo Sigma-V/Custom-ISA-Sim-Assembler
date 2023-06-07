@@ -1,3 +1,5 @@
+import sys
+
 def int_to_bin(n,k):
     number = bin(n)[2:] 
     number = number.zfill(k)  
@@ -14,10 +16,7 @@ for i in range(7):
     registers[temp] = 0
 registers["111"] = [0,0]
 
-f = open("binary.txt","r")             
-data_list = f.readlines()
-f.close()
-
+data_list = sys.stdin.readlines()             
 
 for counter in range(len(data_list)):
     data_list[counter]=data_list[counter].rstrip()
@@ -606,6 +605,7 @@ while(True):
             ProgCounter+=1
     else:
         break
+
 for i in memory_address.keys():
     if memory_address[i] != -1:
         memory_dump.append(int_to_bin(memory_address[i],16))
@@ -617,3 +617,5 @@ for i in range(128 - pussy):
 
 for i in range(128):
     print(memory_dump[i])
+
+
