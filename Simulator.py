@@ -3,9 +3,10 @@ def int_to_bin(n,k):
     number = number.zfill(k)  
     return str(number)
 
+memory_dump = []
 memory_address = {}
 for i in range(128):
-    memory_address[i] = 0
+    memory_address[i] = -1
 registers = {}
 ProgCounter = 0
 for i in range(7):
@@ -28,6 +29,9 @@ no_of_lines = len(data_list)
 data = []
 for i in range(no_of_lines):
     data.append(data_list[i][0])
+
+for i in range(no_of_lines):
+    memory_dump.append(data[i])
 
 while(True):
     line = data[ProgCounter]
@@ -602,3 +606,15 @@ while(True):
             ProgCounter+=1
     else:
         break
+
+for i in memory_address.keys():
+    if memory_address[i] != -1:
+        memory_dump.append(int_to_bin(memory_address[i],16))
+
+pussy = len(memory_dump)
+
+for i in range(128 - pussy):
+    memory_dump.append("0"*16)
+
+for i in range(128):
+    print(memory_dump[i])
