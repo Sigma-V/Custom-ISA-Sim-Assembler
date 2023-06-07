@@ -606,7 +606,6 @@ while(True):
             ProgCounter+=1
     else:
         break
-
 for i in memory_address.keys():
     if memory_address[i] != -1:
         memory_dump.append(int_to_bin(memory_address[i],16))
