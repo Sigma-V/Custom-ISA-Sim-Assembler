@@ -165,9 +165,7 @@ def valid_memory(memory):
                 flag = "is not a valid memory address"
                 break
         return flag
-
-
-reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110"}
+reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110", "FLAGS" : "111"}
 isa_codes = {
         "add" : {"opcode" : "00000", "type" : "a"},
         "sub" : {"opcode" : "00001", "type" : "a"},
@@ -194,6 +192,7 @@ list_of_instructions = list(isa_codes.keys())
 
 list_of_registers = list(reg_codes.keys())
 
+        
 data = sys.stdin.readlines()
 data_1 = data.copy()
 
@@ -275,15 +274,13 @@ for counter in range(len(data)):
     except:
             continue
 
-pussy = 1
 if variable_starting(no_of_variables,line_when_variable_added) == False:
-    pussy = 0
     print("Error: Variables must be declared at the beginning")
 
 if correct_usage_of_halt(input_instruction) != True:
-    pussy = 0
     print(correct_usage_of_halt(input_instruction))
 
+pussy = 1
 
 for i in range(no_of_lines):
     base = 0
@@ -381,8 +378,7 @@ for i in range(no_of_lines):
                 pussy = 0
 
 if pussy == 1:
-    #varun pussy execute (not found)
-    #binary encoding
+    
     m= []
     for i in range(0,127) :
         x = str(bin(i)).lstrip("0b")
