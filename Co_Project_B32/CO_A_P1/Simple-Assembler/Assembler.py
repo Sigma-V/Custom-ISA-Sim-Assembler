@@ -1,34 +1,5 @@
 import sys
 
-def floatingbinary(m):
-    m = float(m)
-
-    integer_part = int(m)
-    fractional_part = m - integer_part
-
-    integer_binary = bin(integer_part)[2:]
-
-    fractional_binary = ""
-    while True:
-        fractional_part *= 2
-        bit = int(fractional_part)
-        fractional_binary += str(bit)
-        fractional_part -= bit
-        if len(fractional_binary) == 5:
-            break
-    bias = 3
-    exponential = len(integer_binary) - 1
-    integer_ans = bin(int(bias+exponential)).lstrip("0b")
-    temp=integer_binary+fractional_binary
-    fractional_ans = temp[1:6:]
-   
-    result = integer_ans +fractional_ans
-    
-    if len(result) != 8:
-        alpha=8-len(result)
-        result = "0"*alpha + result
-    return result
-
 def add(r1,r2,r3):
     val = isa_codes["add"]["opcode"]+"00"+reg_codes[r1]+reg_codes[r2]+reg_codes[r3]
     return val
@@ -150,21 +121,6 @@ def je(r1):
     val += r
     return val
 
-def addf(r1,r2,r3):
-    val = isa_codes["addf"]["opcode"]+"00"+reg_codes[r1]+reg_codes[r2]+reg_codes[r3]
-    return val
-
-def subf(r1,r2,r3):
-    val = isa_codes["subf"]["opcode"]+"00"+reg_codes[r1]+reg_codes[r2]+reg_codes[r3]
-    return val
-
-def movf(r1,r2):
-    val =isa_codes["movf"]["opcode"] + reg_codes[r1]
-    m = r2[1:]
-    temp = floatingbinary(m)
-    val=val+temp
-    return val
-
 def variable_starting(no_of_var,lines):
     if sum(lines) != int((no_of_var)*(no_of_var+1)/2):
         return False
@@ -209,29 +165,9 @@ def valid_memory(memory):
                 flag = "is not a valid memory address"
                 break
         return flag
-    
-def Isvaid_float(m):
-    m = float(m)
 
-    integer_part = int(m)
-    fractional_part = m - integer_part
 
-    integer_binary = bin(integer_part)[2:]
-
-    fractional_binary = ""
-    while fractional_part != 0:
-            fractional_part *= 2
-            bit = int(fractional_part)
-            fractional_binary += str(bit)
-            fractional_part -= bit
-    temp = integer_binary+fractional_binary
-    temp = temp[1::]
-    if len(temp) >5:
-          return 0
-    else:
-          return 1
-    
-reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110", "FLAGS" : "111"}
+reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110"}
 isa_codes = {
         "add" : {"opcode" : "00000", "type" : "a"},
         "sub" : {"opcode" : "00001", "type" : "a"},
@@ -252,10 +188,7 @@ isa_codes = {
         "jlt" : {"opcode" : "11100", "type" : "e"},
         "jgt" : {"opcode" : "11101", "type" : "e"},
         "je" : {"opcode" : "11111", "type" : "e"},
-        "hlt" : {"opcode" : "11010", "type" : "f"},
-        "addf" : {"opcode" : "10000", "type" : "a"},
-        "subf" : {"opcode" : "10001", "type" : "a"},
-        "movf" : {"opcode" : "10010", "type" : "b"}}
+        "hlt" : {"opcode" : "11010", "type" : "f"}}
 
 list_of_instructions = list(isa_codes.keys()) 
 
@@ -390,7 +323,6 @@ for i in range(no_of_lines):
                 print(f"Error in Line-{i+1}: Invalid number of arguments")
                 pussy = 0
             else:
-                
                 if data[i][base+1] not in list_of_registers:
                     print(f"Error in Line-{i+1}: {data[i][base+1]} is not a valid register")
                     pussy = 0
@@ -401,10 +333,6 @@ for i in range(no_of_lines):
                     if valid_immediate(data[i][base+2]) != True:
                         print(f"Error in Line-{i+1}: {data[i][base+2]} {valid_immediate(data[i][base+2])}")
                         pussy = 0
-                    if Isvaid_float(data[i][base+2]) != 1:
-                        print(f"Error in Line-{i+1}: Invalid float")
-                        pussy = 0
-                    
         elif typ == "c":
             nos = len(data[i]) - base
             if nos != 3:
@@ -453,7 +381,8 @@ for i in range(no_of_lines):
                 pussy = 0
 
 if pussy == 1:
-
+    #varun pussy execute (not found)
+    #binary encoding
     m= []
     for i in range(0,127) :
         x = str(bin(i)).lstrip("0b")
@@ -549,15 +478,7 @@ if pussy == 1:
                 val = jgt(final_list[1])
             elif final_list[0] == "je":
                 val = je(final_list[1])
-            elif final_list[0] == "addf":
-                val = addf(final_list[1],final_list[2],final_list[3])
-            elif final_list[0] == "subf":
-                val = subf(final_list[1],final_list[2],final_list[3])
-            elif final_list[0] == "movf":
-                val = movf(final_list[1],final_list[2])
             elif final_list[0] == "hlt":
                 val = hlt()
-        if flag == True:
-            print(val)
         if flag == True:
             print(val)
