@@ -209,6 +209,28 @@ def valid_memory(memory):
                 flag = "is not a valid memory address"
                 break
         return flag
+    
+def Isvaid_float(m):
+    m = float(m)
+
+    integer_part = int(m)
+    fractional_part = m - integer_part
+
+    integer_binary = bin(integer_part)[2:]
+
+    fractional_binary = ""
+    while fractional_part != 0:
+            fractional_part *= 2
+            bit = int(fractional_part)
+            fractional_binary += str(bit)
+            fractional_part -= bit
+    temp = integer_binary+fractional_binary
+    temp = temp[1::]
+    if len(temp) >5:
+          return 0
+    else:
+          return 1
+    
 reg_codes = {"R0" : "000","R1" : "001", "R2" : "010" , "R3" : "011" , "R4" : "100" , "R5" : "101" , "R6" :"110", "FLAGS" : "111"}
 isa_codes = {
         "add" : {"opcode" : "00000", "type" : "a"},
@@ -368,6 +390,7 @@ for i in range(no_of_lines):
                 print(f"Error in Line-{i+1}: Invalid number of arguments")
                 pussy = 0
             else:
+                
                 if data[i][base+1] not in list_of_registers:
                     print(f"Error in Line-{i+1}: {data[i][base+1]} is not a valid register")
                     pussy = 0
@@ -378,6 +401,10 @@ for i in range(no_of_lines):
                     if valid_immediate(data[i][base+2]) != True:
                         print(f"Error in Line-{i+1}: {data[i][base+2]} {valid_immediate(data[i][base+2])}")
                         pussy = 0
+                    if Isvaid_float(data[i][base+2]) != 1:
+                        print(f"Error in Line-{i+1}: Invalid float")
+                        pussy = 0
+                    
         elif typ == "c":
             nos = len(data[i]) - base
             if nos != 3:
